@@ -1,0 +1,148 @@
+﻿<!-- 资源PRO - ZiYuanPro.Com - 免费分享精品资源网站 -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>管理页面</title>
+    <link rel="shortcut icon" href="../../static/JD/favicon.png" type="image/x-icon"/>
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "微软雅黑";
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            /*padding: 140px 0;*/
+            /*background: linear-gradient(to right, rgb(29, 143, 197), rgb(49, 187, 134), rgba(36, 174, 224), rgb(40, 222, 222));*/
+        }
+
+        /*rgb(29, 143, 197,0.14) 最后一个参数是透明度*/
+        .main {
+            max-width: 1300px;
+            width: 80%;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .item {
+            flex: 1;
+            width: 0;
+            height: 550px;
+            border-radius: 15px;
+            position: relative;
+            padding: 70px 50px;
+        }
+
+        .item img {
+            height: 160px;
+            width: 160px;
+            padding: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .item h3 {
+            color: #FFF;
+            text-align: center;
+            font-size: 26px;
+            line-height: 50px;
+            margin-top: 20px;
+        }
+
+        .item p {
+            color: #FFF;
+            line-height: 25px;
+            font-size: 15px;
+            margin-top: 10px;
+        }
+
+        .item .btns {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin-top: 100px;
+        }
+
+        .item a {
+            text-decoration: none;
+            display: block;
+            width: 180px;
+            line-height: 52px;
+            text-align: center;
+            border-radius: 100px;
+            background: #FFF;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .item a:hover {
+            opacity: 0.8;
+        }
+
+        @media screen and (max-width: 730px) {
+            body {
+                padding: 20px;
+            }
+
+            .main {
+                display: block;
+            }
+
+            .item {
+                width: 100%;
+                margin: 0 !important;
+                margin-bottom: 20px !important;
+                transform: scale(1) !important;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="logoDD">
+    <img src="../../static/img/logo.png" style="margin-left: 50px;margin-top: 10px;width: 200px;height: 100px">
+</div>
+
+<div class="main">
+    <div class="item"
+         style="background:linear-gradient(130deg,#1dd0bb,#166abe);z-index:2;transform:scale(1);height: 534px">
+        <img src="../../static/img1/img1.png    "/>
+        <h3>manager</h3>
+        <p style="color: #FFF;text-align: center">公司管理入口</p>
+        <div class="btns">
+            <a style="text-align:center;color:#1867c2;" th:href="@{/login/manager}" >立即进入</a>
+        </div>
+    </div>
+    <div class="item"
+         style="background:linear-gradient(130deg,#0591b0,#3088e1);
+         z-index:2;transform:scale(0.97);margin-left:-8px;">
+        <img src="../../static/img1/img2.png"/>
+        <h3>shopkeeper</h3>
+        <p style="color: #FFF;text-align: center">店家页面入口</p>
+        <div class="btns">
+            <a style="color:#6084e2;" th:href="@{/keeper/store}">立即进入</a>
+        </div>
+    </div>
+    <div class="item"
+         style="background:linear-gradient(130deg,#0591b0,#3088e1);z-index:2;transform:scale(0.97);margin-left:-15px;">
+        <img src="../../static/img1/img3.png"/>
+        <h3>shopping</h3>
+        <p style="color: #FFF;text-align: center">用户在线购物入口</p>
+        <div class="btns">
+            <a style="color:#6084e2;" th:href="@{/user/shopping}">立即进入</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

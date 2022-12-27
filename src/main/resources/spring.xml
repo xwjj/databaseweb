@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--扫描组件 除了控制层-->
+    <context:component-scan base-package="com.db">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!--引入jdbc.properties-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <!--配置数据源-->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.user}"/>
+        <property name="password" value="${jdbc.pwd}"/>
+    </bean>
+
+    <!--配置事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--
+        开启事务注解驱动
+        将使用注解@Transactional标识的方法或类中的所有方法进行事务管理
+    -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!--配置SqlSessionFactoryBean,可以在spring的ioc中获取sqlSessionFactory对象-->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--设置myBatis的核心配置文件的路径-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!--配置此项目以后 mybatis-config.xml就可以不用配置数据源了-->
+        <property name="dataSource" ref="dataSource"/>
+        <!--配置此项目以后 mybatis-config.xml就可以不用配置类型别名了-->
+        <property name="typeAliasesPackage" value="com.db.pojo"/>
+        <!--如果映射文件的包与包名完全与映射接口的一致则可以不设置-->
+        <!--只有映射文件的包与和mapper接口的包不一致时才需要设置 但没有最下面的设置就必须要设置值此项-->
+        <!--<property name="mapperLocations" value="classpath:mappers/*.xml"/>-->
+        <!--也可以配置在mybatis的核心配置文件中-->
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor"/>
+            </array>
+        </property>
+    </bean>
+
+    <!--配置mapper接口的扫描，可以将指定包下面的所有的mapper接口,
+    通过sqlSession创建代理实现类对象，并将这些对象交给ioc容器管理-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.db.mapper"/>
+    </bean>
+</beans>

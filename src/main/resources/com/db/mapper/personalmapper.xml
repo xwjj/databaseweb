@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.db.mapper.personalmapper">
+    <select id="getAllUserByIp" resultType="foodDisplay1">
+        select *
+        from allfood a,
+        storestock s
+        where a.id=s.id
+        <if test="ownerid!=null and ownerid!=''">
+            and s.ownerid=#{ownerid}
+        </if>
+    </select>
+</mapper>

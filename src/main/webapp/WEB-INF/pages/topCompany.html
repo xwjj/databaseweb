@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="../../static/JD/favicon.png">
+    <title>总公司管理界面</title>
+    <script src="../../static/JD/js/jquery-3.6.1.js"></script>
+    <script src="../../static/JD/js/jqueryui/jquery-ui.js"></script>
+    <link rel="stylesheet" href="../../static/JD/js/jqueryui/jquery-ui.css">
+    <script src="../../static/JD/js/axios.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#info5").draggable().hide();
+            $("#info4").hide();
+            $("#info3").hide();
+            $("#info2").draggable().hide();
+            $("#info1").fadeIn();
+        });
+    </script>
+    <style>
+        #top {
+            border-radius: 5px;
+            background: #e0e0e0;
+            box-shadow: 20px 20px 60px #bebebe,
+            -20px -20px 60px #ffffff;
+            width: 1249px;
+            height: 20px;
+            text-align: right;
+            margin-top: -24px;
+            margin-left: 10px;
+        }
+
+        span {
+            margin-right: 20px;
+        }
+
+        #leftGraph {
+            width: 15.7%;
+        }
+
+        #info1 {
+            position: absolute;
+            left: 340px;
+            top: 120px;
+        }
+
+        table {
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 2px solid rgb(8, 128, 227, 0.4);
+            font-size: 20px;
+            font-family: "Adobe 黑体 Std R", serif;
+            color: #1ba1e6;
+        }
+
+        th, td {
+            width: 200px;
+            height: 50px;
+            text-align: center;
+        }
+
+        .choice:hover {
+            cursor: pointer;
+        }
+
+        a {
+            margin-left: 10px;
+            color: #166abe;
+            text-decoration: none;
+        }
+
+        #info2 {
+            position: fixed;
+            width: 450px;
+            height: 400px;
+            background-color: #51a2e1;
+            left: 450px;
+            top: 160px;
+            display: flex;
+            flex-flow: wrap row;
+            justify-content: center;
+            border-radius: 10px;
+        }
+
+        #key2, #key3, #key4 {
+            width: 260px;
+            height: 35px;
+            margin-left: 95px;
+            margin-top: 50px;
+            border-radius: 10px;
+            border: 0;
+        }
+
+        #gou {
+            background-color: white;
+            border: 0;
+            border-radius: 10px;
+            width: 80px;
+            height: 30px;
+            margin-left: 113px;
+            margin-top: 50px;
+        }
+
+        #close {
+            background-color: white;
+            border: 0;
+            border-radius: 10px;
+            width: 80px;
+            height: 30px;
+            margin-left: 60px;
+        }
+
+        #gou:hover, #close:hover {
+            background-color: #65b9e5;
+        }
+
+        #gou:active, #close:active {
+            background-color: #05498d;
+        }
+
+        .table1:hover {
+            cursor: pointer;
+        }
+
+        #info3 {
+            position: absolute;
+            left: 440px;
+            top: 120px;
+        }
+
+        #info4 {
+            position: absolute;
+            left: 240px;
+            top: 120px;
+        }
+
+        #info5 {
+            position: fixed;
+            width: 450px;
+            height: 480px;
+            background-color: #51a2e1;
+            left: 450px;
+            top: 80px;
+            display: flex;
+            flex-flow: wrap row;
+            justify-content: center;
+            border-radius: 10px;
+            align-content: space-around;
+        }
+
+        #u1, #u2, #u3, #u4 {
+            width: 260px;
+            height: 35px;
+            margin-left: 5px;
+            border-radius: 10px;
+            border: 0;
+            text-align: center;
+        }
+
+        #q {
+            background-color: white;
+            border: 0;
+            border-radius: 10px;
+            width: 80px;
+            height: 30px;
+        }
+
+        #f {
+            background-color: white;
+            border: 0;
+            border-radius: 10px;
+            width: 80px;
+            height: 30px;
+        }
+
+        #bottom {
+            width: 260px;
+            height: 35px;
+            display: flex;
+            flex-flow: wrap row;
+            align-content: space-around;
+            justify-content: space-around;
+        }
+
+        #q:hover, #f:hover {
+            cursor: pointer;
+            background-color: #65b9e5;
+        }
+
+        #q:active, #f:active {
+            background-color: #05498d;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <div id="sy">
+        <a th:href="@{/login/manager}" id="logo" class="top">
+            <img src="../../static/img/logo.png" style="width: 18%" alt="#">
+        </a>
+        <div id="top" class="top">
+            <a href="#" id="choice2" class="choice" onclick="swift1()"><span>店主信息</span></a>
+            <a href="#" id="choice1" class="choice" onclick="swift()"><span>店铺信息</span></a>
+            <a href="#" id="choice3" class="choice" onclick="swift2()"><span>用户信息</span></a>
+        </div>
+    </div>
+</header>
+<div id="left">
+    <img id="leftGraph" src="../../static/img/left.png" alt="#">
+</div>
+<div id="info1">
+    <table>
+        <tr>
+            <th>店主名</th>
+            <th>店主密码</th>
+            <th>店主ip地址</th>
+            <th>操作</th>
+        </tr>
+        <tr th:each="keeper:${keepers}" th:object="${keeper}">
+            <td th:text="|*{username}|">张三</td>
+            <td th:text="|*{password}|">123</td>
+            <td th:text="|*{ip}|">123</td>
+            <td>
+                <a class="table1" th:onclick="change([[*{id}]],[[*{username}]],[[*{password}]],[[*{ip}]])">修改</a>
+                <a class="table1" th:onclick="remove([[*{id}]])">删除</a>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="info2">
+    <form th:action="@{/change/keeper}" method="post">
+        <input type="hidden" id="key1" name="id" placeholder="店主名" style="text-align: center" value="666">
+        <label for="key2"></label><input type="text" id="key2" name="username" placeholder="店主名"
+                                         style="text-align: center">
+        <label for="key3"></label><input type="text" id="key3" name="password" placeholder="店主密码"
+                                         style="text-align: center">
+        <label for="key4"></label><input type="text" id="key4" name="ip" placeholder="ip地址"
+                                         style="text-align: center"><br>
+        <input id="gou" type="submit" value="确认" th:onclick="">
+        <button id="close" onclick="exit()">取消</button>
+    </form>
+</div>
+<div id="info3">
+    <table>
+        <tr>
+            <th>id</th>
+            <th>店铺地址</th>
+            <th>负责人</th>
+        </tr>
+        <tr th:each="store:${stores}" th:object="${store}">
+            <td th:text="*{id}">1</td>
+            <td th:text="*{ip}">纽约</td>
+            <td th:text="*{username}">张三</td>
+        </tr>
+    </table>
+</div>
+<div id="info4">
+    <table>
+        <tr>
+            <td>姓名</td>
+            <td>密码</td>
+            <td>ip地址</td>
+            <td>电话号码</td>
+            <td>操作</td>
+        </tr>
+        <tr th:each="user:${users}" th:object="${user}">
+            <td th:id="|*{username}1|" th:text="*{username}">老六</td>
+            <td th:id="|*{username}2|" th:text="*{password}">666</td>
+            <td th:id="|*{username}3|" th:text="*{ip}">老六村</td>
+            <td th:id="|*{username}4|" th:text="*{phone}">6666</td>
+            <td th:id="|*{username}5|">
+                <a class="table1" th:onclick="change1([[*{username}]],[[*{password}]],[[*{ip}]],[[*{phone}]])">修改</a>
+                <a class="table1" th:onclick="remove1([[*{username}]]);cartoon1([[*{username}]])">删除</a>
+            </td>
+        </tr>
+    </table>
+</div>
+<div id="info5">
+    <label for="u1"></label><input id="u1" class="u" type="text" placeholder="用户名" disabled="disabled">
+    <label for="u2"></label><input id="u2" class="u" type="text" placeholder="密码">
+    <label for="u3"></label><input id="u3" class="u" type="text" placeholder="ip地址">
+    <label for="u4"></label><input id="u4" class="u" type="text" placeholder="电话号码">
+    <div id="bottom">
+        <button id="q" th:onclick="change2()">确认</button>
+        <button id="f" onclick="exit1()">取消</button>
+    </div>
+</div>
+<script type="text/javascript">
+    function change(info1, info2, info3, info4) {
+        $("#key1").val(info1);
+        $("#key2").val(info2);
+        $("#key3").val(info3);
+        $("#key4").val(info4);
+        $("#info2").fadeIn();
+    }
+
+    function exit() {
+        $("#info2").fadeOut();
+    }
+
+    function remove(info1) {
+        if(!window.confirm("确定要删除这名用户吗？")) return;
+        if (info1 == "") {
+            return;
+        }
+        axios.post(
+            "/remove/keeper",
+            {id: info1}
+        ).then(r => {
+            window.location.reload();
+            alert("删除成功");
+            console.log(r.data());
+        });
+    }
+
+    function swift() {
+        $("#info4").fadeOut();
+        $("#info1").fadeOut();
+        $("#info3").fadeIn();
+    }
+
+    function swift1() {
+        $("#info4").fadeOut();
+        $("#info3").fadeOut();
+        $("#info1").fadeIn();
+    }
+
+    function swift2() {
+        $("#info3").fadeOut();
+        $("#info1").fadeOut();
+        $("#info4").fadeIn();
+    }
+
+    function quickSwift() {
+        $("#info3").hide();
+        $("#info1").hide();
+        $("#info4").show();
+    }
+
+    function change1(info1, info2, info3, info4) {
+        $("#u1").val(info1);
+        $("#u2").val(info2);
+        $("#u3").val(info3);
+        $("#u4").val(info4);
+        $("#info5").fadeIn();
+    }
+
+    function exit1() {
+        $("#info5").fadeOut();
+    }
+
+    function cartoon() {
+        let basic = $("#u1").val();
+        $("#" + basic + "2").text($("#u2").val());
+        $("#" + basic + "3").text($("#u3").val());
+        $("#" + basic + "4").text($("#u4").val());
+    }
+
+    function cartoon1(info1) {
+        $("#" + info1 + "1").fadeOut();
+        $("#" + info1 + "2").fadeOut();
+        $("#" + info1 + "3").fadeOut();
+        $("#" + info1 + "4").fadeOut();
+        $("#" + info1 + "5").fadeOut();
+    }
+
+    function change2() {
+        $("#info5").hide();
+        let info1 = $("#u1").val();
+        let info2 = $("#u2").val();
+        let info3 = $("#u3").val();
+        let info4 = $("#u4").val();
+        axios.post(
+            "/change/users",
+            {username: info1, password: info2, ip: info3, phone: info4}
+        ).then(r => {
+            alert("修改成功");
+            cartoon();
+            console.log(r.data());
+        });
+    }
+
+    function remove1(info1) {
+        if(!window.confirm("确定要删除这名用户吗？")) return;
+        axios.post(
+            "/remove/users",
+            {username: info1}
+        ).then(r => {
+            alert("删除用户成功");
+            console.log(r.data());
+        });
+    }
+</script>
+</body>
+</html>

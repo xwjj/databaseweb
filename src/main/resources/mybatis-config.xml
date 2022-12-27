@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--此文件为和核心配置文件 负责数据库的连接-->
+<!--上面是xml版本号 以及编码格式-->
+<!--xml文件的约束规定xml文件中能使用哪些约束-->
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--
+        mybatis核心配置文件中的标签必须要按照指定的顺序配置
+        properties?,settings?,typeAliases?,typeHandlers?,objectFactory?,objectWrapperFactory?,
+        reflectorFactory?,plugins?,environments?,databaseIdProvider?,mappers?
+    -->
+
+    <!--引入properties文件，以后就可以在当前文件中使用的方式访问value-->
+   <!-- <properties resource="jdbc.properties"/>-->
+
+    <!--mapUnderscoreToCamelCae:自动将下划线设置为驼峰-->
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <!--类型别名
+        typeAlias:设置类型别名，几位某个具体的类型设置别名
+        在mybatis范围中
+    -->
+    <!--<typeAliases>
+        <package name=""/>
+    </typeAliases>-->
+
+    <!--配置连接数据库的环境
+        environments:配置连接数据库的环境
+        default:配置默认使用环境的id
+    -->
+    <!--<environments default="development">
+        &lt;!&ndash;
+            environments:设置一个具体的环境
+            id:设置唯一环境标识，不能重复
+        &ndash;&gt;
+        <environment id="development">
+            &lt;!&ndash;事务管理器类型等于jdbc
+                transactionManager:设置事务管理器的属性
+                type:设置事务的管理方式
+                type="JDBC|MANAGED"
+                JDBC:表示使用JDBC中原生的事务管理方式
+                MANAGED:被管理，例如spring
+            &ndash;&gt;
+            <transactionManager type="JDBC"/>
+
+            &lt;!&ndash;数据源  帮助我们管理数据库的链接
+                datasource:设置数据源
+                type:设置数据源的类型
+                type:"POOLED|UNPOOLED|JNDI"
+                POOLED:使用数据库连接池
+                UNPOOLED:不使用数据库连接池，每次使用链接都是重新创建链接的
+                JNDI:表示使用上下文中的数据源
+            &ndash;&gt;
+            <dataSource type="POOLED">
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.user}"/>
+                <property name="password" value="${jdbc.pwd}"/>
+            </dataSource>
+        </environment>
+
+    </environments>-->
+
+
+    <!--<plugins>
+        &lt;!&ndash;配置分页插件&ndash;&gt;
+        <plugin interceptor="com.github.pagehelper.PageInterceptor"/>
+    </plugins>-->
+
+    <!--引入mybatis的映射文件 存储的是数据库sql语句-->
+    <!--<mappers>
+        &lt;!&ndash;        <mapper resource="mappers/UserMapper.xml"/>&ndash;&gt;
+        &lt;!&ndash;以包的方式引入映射文件，但是必须满足两个条件
+        1.mapper接口和映射文件所在的包必须一致
+        2.mapper接口的名字和映射文件必须一致
+        &ndash;&gt;
+        <package name=""/>
+    </mappers>-->
+
+</configuration>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>货物信息修改</title>
+    <link rel="icon" th:href="@{/static/JD/favicon.png}">
+    <script th:src="@{/static/JD/js/jquery.min.js}"></script>
+    <script th:src="@{/static/JD/js/axios.min.js}"></script>
+    <style>
+        body {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-around;
+        }
+
+        #top {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #logo {
+            width: 18%;
+        }
+
+        .rect {
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 20px 20px 60px #bebebe,
+            -20px -20px 60px #ffffff;
+        }
+
+        #topBar {
+            display: flex;
+            width: 550px;
+            height: 550px;
+            align-content: space-around;
+            justify-content: space-around;
+            flex-flow: row wrap;
+        }
+
+    </style>
+</head>
+<body>
+<input type="hidden" id="using" th:value="${change.username}" style="opacity: 0" value="zhangsan">
+<div id="top">
+    <a th:href="@{|/keeper/back/${change.username}|}">
+        <img id="logo" th:src="@{/static/img/logo.png}" style="width: 18%" alt="#">
+    </a>
+</div>
+<div id="topBar" class="rect">
+    <div class="rect" style="width: 250px;height: 50px">
+        <span style="position:absolute;margin-top: 13px;margin-left: 114px">修改货品</span>
+    </div>
+    <div class="rect" style="width: 500px;height: 50px">
+        <label>
+            生鲜名:<input id="food" type="text" style="width: 439px;height: 44px;border-radius: 10px;text-align: center"
+                       disabled="disabled" th:value="${change.name}">
+        </label>
+    </div>
+    <div class="rect" style="width: 500px;height: 50px">
+        <label>
+            生鲜品质:<input id="quality" type="text"
+                        style="width: 423px;height: 44px;border-radius: 10px;text-align: center"
+                        th:value="${change.quality}" disabled="disabled">
+        </label>
+    </div>
+    <div class="rect" style="width: 500px;height: 50px">
+        <label>
+            生鲜进价:<input id="inprice" type="text"
+                        style="width: 423px;height: 44px;border-radius: 10px;text-align: center">
+        </label>
+    </div>
+    <div class="rect" style="width: 500px;height: 50px">
+        <label>
+            生鲜售价:<input id="outprice" type="text"
+                        style="width: 423px;height: 44px;border-radius: 10px;text-align: center">
+        </label>
+    </div>
+    <div class="rect" style="width: 500px;height: 50px">
+        <label>
+            生鲜数量:<input id="number" type="text"
+                        style="width: 423px;height: 44px;border-radius: 10px;text-align: center">
+        </label>
+    </div>
+    <button style="width: 100px;height: 40px;border-radius: 10px" onclick="changeSell()">
+        修改
+    </button>
+</div>
+<script type="text/javascript">
+    function changeSell() {
+        let info1 = $("#using").val();
+        let info2 = $("#food").val();
+        let info3 = $("#quality").val();
+        let info4 = $("#inprice").val();
+        let info5 = $("#outprice").val();
+        let info6 = $("#number").val();
+        if(info3==""||info4==""||info5==""||info6=="") {
+            alert("有空行");
+            return;
+        }
+        alert("确定要修改这条数据吗")
+        axios.post(
+            "/keeper/change/sell",
+            {username: info1, name: info2, quality: info3, inprice: info4, outprice: info5, number: info6}
+        ).then(r => {
+            alert("修改成功")
+            console.log(r.data())
+        }).catch(
+            function (error) {
+                console.log(error);
+            }
+        );
+    }
+</script>
+</body>
+</html>

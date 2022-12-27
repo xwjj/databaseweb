@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>线上订单</title>
+    <link rel="shortcut icon" th:href="@{/static/JD/favicon.png}" type="image/x-icon"/>
+    <link rel="stylesheet" th:href="@{/static/JD/css/normalize.css}"/>
+    <link rel="stylesheet" th:href="@{/static/JD/css/base.css}"/>
+    <link rel="stylesheet" th:href="@{/static/JD/css/cart.css}">
+    <script type="text/javascript" th:src="@{/static/JD/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/JD/js/base.js}"></script>
+    <script type="text/javascript" th:src="@{/static/JD/js/cart.js}"></script>
+    <script type="text/javascript" th:src="@{/static/JD/js/axios.min.js}"></script>
+</head>
+<body>
+<header>
+    <a th:href="@{/keeper/back/{username}(username=${using})}">
+        <img th:src="@{/static/img/logo.png}" style="width:18%" alt="找不到图片">
+    </a>
+</header>
+<div class="shortcut">
+    <div class="w">
+        <ul class="fr nav">
+            <li class="space"></li>
+            <li>
+                <a href="#">欢迎你</a>
+                <a href="#" id="ou" th:text="|${using}|"></a>
+            </li>
+            <li class="space"></li>
+            <li>
+                <a href="#">这是你的购物车</a>
+            </li>
+            <li class="space"></li>
+        </ul>
+    </div>
+</div>
+<div class="py-container">
+    <div class="w">
+        <div class="allgoods">
+            <h4>全部商品
+                <span>11</span>
+            </h4>
+            <div class="cart-main">
+                <div class="cart-th clearfix">
+                    <div class="">商品信息</div>
+                    <div class="">商品等级</div>
+                    <div class="" style="margin-left: 13px">售价</div>
+                    <div class="" style="margin-left: 120px">总购买量</div>
+                    <div class="" style="margin-left: 10px">总价</div>
+                    <div class="" style="margin-left: 0">操作</div>
+                </div>
+                <div class="cart-item-list">
+                    <div class="cart-body">
+                        <div class="cart-list">
+                            <ul class="goods-list yui3-g" th:each="subscribe:${pages.list}" th:object="${subscribe}">
+                                <li class="yui3-u-3-8 pr">
+                                    <div class="good-item">
+                                        <div class="item-img">
+                                            <img th:src="@{|/static/foodImage/*{img}|}">
+                                        </div>
+                                        <div class="item-msg" th:text="|生鲜名:*{name}|">买了个der</div>
+                                    </div>
+                                </li>
+                                <li class="yui3-u-1-8" style="margin-left: 140px">
+                                    <span th:text="|等级*{quality}|">颜色: 银色</span>
+                                    <br>
+                                </li>
+                                <li class="yui3-u-1-8" style="margin-left: 140px">
+                                    <span class="price" th:text="|*{outprice}|" style="padding-left: 120px"></span>
+                                </li>
+                                <li class="yui3-u-1-8" style="margin-left: 100px">
+                                    <div class="clearfix">
+                                        <a href="javascript:;" class="increment mins"
+                                           th:onclick="subtract([[*{name}]],[[*{quality}]],[[*{username}]])">-</a>
+                                        <input autocomplete="off" type="text" th:value="|*{number}|" minnum="0"
+                                               class="itxt" disabled="disabled">
+                                        <a href="javascript:;" class="increment plus"
+                                           th:onclick="add([[*{name}]],[[*{quality}]],[[*{username}]])">+</a>
+                                    </div>
+                                    <div class="youhuo">有货</div>
+                                </li>
+                                <li class="yui3-u-1-8" style="margin-left: 60px">
+                                    <span class="sum" th:text="|*{all}|"></span>
+                                </li>
+                                <li class="yui3-u-1-8">
+                                    <div class="del1">
+                                        <a href="javascript:;"
+                                           th:onclick="del([[*{name}]],[[*{quality}]],[[*{username}]])">发货</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="text-align: center">
+    <a th:if="${pages.hasPreviousPage}" th:href="@{|/keeper/LookSub/${using}/1|}">首页</a>
+    <a th:if="${pages.hasPreviousPage}" th:href="@{|/keeper/LookSub/${using}/${pages.prePage}|}">上一页</a>
+    <span th:each="num:${pages.navigatepageNums}">
+        <a th:if="${pages.pageNum==num}" style="color:red;" th:href="@{|/keeper/LookSub/${using}/${num}|}"
+           th:text="'['+${num}+']'"></a>
+        <a th:if="${pages.pageNum!=num}" th:href="@{|/keeper/LookSub/${using}/${num}|}" th:text="${num}"></a>
+    </span>
+    <a th:if="${pages.hasNextPage}" th:href="@{|/keeper/LookSub/${using}/${pages.nextPage}|}">下一页</a>
+    <a th:if="${pages.hasNextPage}" th:href="@{|/keeper/LookSub/${using}/${pages.pages}|}">末页</a>
+</div>
+<script type="text/javascript">
+    function del(info1, info2, info3) {
+        alert("确认要发货吗");
+        axios.post(
+            "/delete/subscribe",
+            {username: info3, name: info1, quality: info2}
+        ).then(r => {
+            alert("发货成功");
+            console.log(r.data());
+        });
+    }
+
+    function subtract(info1, info2, info3) {
+        let user = $("#ou").text();
+        alert(info1 + "减去一份");
+        axios.post(
+            "/food/subtract",
+            {username: info3, name: info1, quality: info2}
+        ).then(r => {
+            alert("成功减去");
+            console.log(r.data());
+        });
+    }
+
+    function add(info1, info2, info3) {
+        let user = $("#ou").text();
+        alert(info1 + "添加一份");
+        axios.post(
+            "/food/add",
+            {username: info3, name: info1, quality: info2}
+        ).then(r => {
+            alert("成功添加");
+            console.log(r.data());
+        });
+    }
+</script>
+</body>
+</html>
+
+<!--i是给文字添加斜体样式-->

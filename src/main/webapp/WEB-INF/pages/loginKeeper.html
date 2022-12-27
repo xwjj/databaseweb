@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>商铺管理入口</title>
+    <link rel="icon" href="../../static/JD/favicon.png">
+    <link type="text/css" rel="stylesheet" href="../../static/css/style.css"/>
+    <script src="../../static/JD/js/jquery-3.6.1.js"></script>
+    <script src="../../static/JD/js/axios.min.js"></script>
+    <style>
+        #register:hover {
+            color: #166abe;
+            cursor: pointer;
+        }
+
+        #register:active {
+            color: #be3030;
+        }
+
+        #login:hover {
+            color: #166abe;
+            cursor: pointer;
+        }
+
+        #login:active {
+            color: #be3030;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            $("#content2").hide();
+        })
+    </script>
+</head>
+<body>
+<div id="login_header">
+    <a th:href="@{/}">
+        <img class="logo_img" alt="" src="../../static/img/logo.png">
+    </a>
+</div>
+
+<div class="login_banner">
+    <div id="l_content">
+        <span class="login_word">欢迎登录</span>
+    </div>
+    <div id="content">
+        <div class="login_form">
+            <div class="login_box">
+                <div class="tit">
+                    <h1>商铺管理入口</h1>
+                </div>
+                <div class="msg_cont">
+                    <b></b>
+                    <span class="errorMsg" style="margin-left: 70px">请输入用户名和密码</span>
+                </div>
+                <div class="form">
+                    <form th:action="@{/keeper/login}" method="post">
+                        <label>用户名称：</label>
+                        <input class="itxt" type="text" placeholder="请输入用户名" autocomplete="off" tabindex="1"
+                               name="username" id="username"/>
+                        <br/>
+                        <br/>
+                        <label>用户密码：</label>
+                        <input class="itxt" type="password" placeholder="请输入密码" autocomplete="off" tabindex="1"
+                               name="password" id="password"/>
+                        <br/>
+                        <br/>
+                        <input type="submit" value="登录" id="sub_btn"/>
+                        <a id="register"
+                           style="font-size: 13px;float:right;margin-top: 10px;margin-right: 20px">注册</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="content2">
+        <div class="login_form1">
+            <div class="login_box">
+                <div class="tit">
+                    <h1>商铺注册</h1>
+                </div>
+                <div class="msg_cont">
+                    <b></b>
+                    <span class="errorMsg" style="margin-left: 90px">请输入注册信息</span>
+                </div>
+                <div class="form">
+                    <label>用户名称：</label>
+                    <input class="itxt" type="text" placeholder="请输入用户名" autocomplete="off" tabindex="1"
+                           name="username" id="user"/>
+                    <br/>
+                    <br/>
+                    <label>用户密码：</label>
+                    <input class="itxt" type="password" placeholder="请输入密码" autocomplete="off" tabindex="1"
+                           name="password" id="pass"/>
+                    <br/>
+                    <br/>
+                    <label>商铺地址：</label>
+                    <input class="itxt" type="text" placeholder="请输入店铺地址" autocomplete="off" tabindex="1"
+                           name="location" id="location"/>
+                    <br/>
+                    <br/>
+                    <input type="submit" value="注册" id="sub_btn1" th:onclick="register()"/>
+                    <a id="login" style="font-size: 15px">登录</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="bottom">
+      <span>
+        盒马实体店铺管理页面2022
+      </span>
+</div>
+<script type="text/javascript">
+    $("#register").click(function () {
+        $("#content").fadeOut("slow");
+        $("#content2").fadeIn("slow");
+    })
+    $("#login").click(function () {
+        $("#content").fadeIn("slow");
+        $("#content2").fadeOut("slow");
+    })
+
+    function register() {
+        let info1 = $("#user").val();
+        let info2 = $("#pass").val();
+        let info3 = $("#location").val();
+        if (info1 == "" || info2 == "" || info3 == "") {
+            alert("有数据为空");
+            return;
+        }
+        axios.post(
+            "/keeper/register",
+            {username: info1, password: info2, ip: info3}
+        ).then(r => {
+            alert("商铺注册成功");
+            console.log(r.data());
+        })
+    }
+</script>
+</body>
+</html>

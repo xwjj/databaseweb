@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>进货界面</title>
+    <link rel="icon" href="../../static/JD/favicon.png">
+    <script src="../../static/JD/js/jquery.min.js"></script>
+    <script src="../../static/JD/js/axios.min.js"></script>
+    <style>
+        body {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-around;
+        }
+
+        #top {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #logo {
+            width: 18%;
+        }
+
+        #money {
+            width: 100px;
+            height: 50px;
+        }
+
+        #choose {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-around;
+            align-items: flex-start;
+            align-content: flex-start;
+        }
+
+
+        .rect {
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 20px 20px 60px #bebebe,
+            -20px -20px 60px #ffffff;
+        }
+
+        #money {
+            margin-top: 20px;
+            margin-right: 20px;
+        }
+
+        #text1 {
+            margin-left: 10px;
+        }
+
+        #nu {
+            position: absolute;
+            margin-left: -30px;
+            margin-top: 29px;
+        }
+
+        #choose {
+            width: 450px;
+            height: 550px;
+            overflow: auto;
+            display: flex;
+            flex-flow: row wrap;
+            align-content: flex-start;
+        }
+
+        #text2 {
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-around;
+            margin-top: 10px;
+            width: 450px;
+        }
+
+        .text2-in {
+
+        }
+
+        .choices {
+            width: 400px;
+            height: 90px;
+            margin-top: 10px;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 20px 20px 60px #bebebe,
+            -20px -20px 60px #ffffff;
+        }
+
+        #topBar {
+            display: flex;
+            width: 550px;
+            height: 550px;
+            align-content: space-around;
+            justify-content: space-around;
+            flex-flow: row wrap;
+        }
+
+    </style>
+</head>
+<body>
+<input type="hidden" id="using" th:value="${using}" style="opacity: 0" value="zhangsan">
+<div id="top">
+    <a th:href="@{|/keeper/back/${using}|}">
+        <img id="logo" src="../../static/img/logo.png" alt="#">
+    </a>
+</div>
+<div id="choose" class="rect">
+    <div id="text2">
+        <span class="text2-in">商品信息</span>
+    </div>
+    <div class="choices" th:each="info:${all}" th:object="${info}">
+        <span class="img" style="position: relative" th:onclick="addInfo([[*{name}]])">
+            <img th:src="@{|/static/foodImage/*{img}|}" style="width: 80px;
+            position:absolute;left: 70px;margin-top: 5px" alt="#">
+            <span id="i1" style="position: absolute;left: 290px;margin-top: 14px" th:text="|*{name}|">虾</span>
+        </span>
+    </div>
+</div>
+<div id="topBar" class="rect">
+    <div class="rect" style="width: 250px;height: 50px">
+        <span style="position:absolute;margin-top: 13px;margin-left: 114px">进货</span>
+    </div>
+    <div class="rect" style="width: 500px;height: 50px">
+        <label>
+            生鲜名:<input id="food" type="text" style="width: 439px;height: 44px;border-radius: 10px;text-align: center">
+        </label>
+    </div>
+    <div class="rect" style="width: 500px;height: 50px">
+        <label>
+            生鲜品质:<input id="quality" type="text"
+                        style="width: 423px;height: 44px;border-radius: 10px;text-align: center">
+        </label>
+    </div>
+    <div class="rect" style="width: 500px;height: 50px">
+        <label>
+            生鲜进价:<input id="inprice" type="text"
+                        style="width: 423px;height: 44px;border-radius: 10px;text-align: center">
+        </label>
+    </div>
+    <div class="rect" style="width: 500px;height: 50px">
+        <label>
+            生鲜售价:<input id="outprice" type="text"
+                        style="width: 423px;height: 44px;border-radius: 10px;text-align: center">
+        </label>
+    </div>
+    <div class="rect" style="width: 500px;height: 50px">
+        <label>
+            生鲜数量:<input id="number" type="text"
+                        style="width: 172px;height: 44px;border-radius: 10px;text-align: center">
+        </label>
+        <label>
+            生产日期:<input id="date" type="text"
+                        style="width: 171px;height: 44px;border-radius: 10px;text-align: center" placeholder="格式:yyyy-mm-dd">
+        </label>
+    </div>
+    <button style="width: 100px;height: 40px;border-radius: 10px" onclick="inFood()">
+        结算
+    </button>
+</div>
+<script type="text/javascript">
+    function addInfo(info1) {
+        $("#food").val(info1);
+    }
+
+    function inFood() {
+        let name = $("#food").val();
+        let quality = $("#quality").val();
+        let inprice = $("#inprice").val();
+        let outprice = $("#outprice").val();
+        let number = $("#number").val();
+        let date = $("#date").val();
+        let using = $("#using").val();
+        if (number == ""||name==""||quality==""||inprice==""||outprice==""||date==""||using=="") {
+            alert("有数据为空");
+            return;
+        }
+        alert("确认进货");
+        axios.post(
+            "/into/food",
+            {
+                name: name,
+                quality: quality,
+                inprice: inprice,
+                outprice: outprice,
+                number: number,
+                date: date,
+                username: using
+            }
+        ).then(r => {
+            window.location.reload();
+            alert("成功");
+            console.log(r.data());
+        }).catch(function (error) {
+            alert(error);
+            console.log(error);
+        });
+    }
+</script>
+</body>
+</html>

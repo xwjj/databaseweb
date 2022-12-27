@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.db.mapper.subscribesMapper">
+    <select id="allSubscribes" resultType="completeCart1">
+        select a.img, a.name, st.quality, st.outprice, s.number
+        from subscribe s,
+             allfood a,
+             storestock st,
+             onlineuser o,
+             store sto
+        where s.username = o.username
+          and o.ip = sto.ip
+          and sto.ownerid = st.ownerid
+          and s.quality = st.quality
+          and s.foodid = st.id
+          and a.id=s.foodid
+        <if test="username!=null and username!=''">
+            and s.username=#{username}
+        </if>
+    </select>
+</mapper>

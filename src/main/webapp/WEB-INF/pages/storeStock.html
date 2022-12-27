@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>库存</title>
+    <link rel="shortcut icon" href="../../static/JD/favicon.png" type="image/x-icon"/>
+    <link rel="stylesheet" href="../../static/JD/css/normalize.css"/>
+    <link rel="stylesheet" href="../../static/JD/css/base.css"/>
+    <link rel="stylesheet" href="../../static/JD/css/cart.css">
+    <script type="text/javascript" src="../../static/JD/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../static/JD/js/base.js"></script>
+    <script type="text/javascript" src="../../static/JD/js/cart.js"></script>
+    <script type="text/javascript" src="../../static/JD/js/axios.min.js"></script>
+    <script type="text/javascript">
+        function del(info1, info2) {
+            let user = $("#ou").text();
+            alert("确定要清空这一商品的库存吗");
+            axios.post(
+                "/keeper/delete",
+                {username: user, name: info1, quality: info2}
+            ).then(r => {
+                alert("删除成功");
+                console.log(r.data());
+            });
+        }
+
+        function subtract(info1, info2) {
+            let user = $("#ou").text();
+            alert(info1 + "减去一份");
+            axios.post(
+                "/keeper/subtractOne",
+                {username: user, name: info1, quality: info2}
+            ).then(r => {
+                alert("成功售出一份");
+                console.log(r.data());
+            });
+        }
+
+        function add(info1, info2) {
+            let user = $("#ou").text();
+            alert(info1 + "添加一份");
+            axios.post(
+                "/keeper/addOne",
+                {username: user, name: info1, quality: info2}
+            ).then(r => {
+                alert("成功添加");
+                console.log(r.data());
+            });
+        }
+
+        function alert11(info1, info2, info3) {
+            let start = new Date(info2);
+            let end = new Date();
+            let result = (end - start) / 86400000;
+            if (result > info3) {
+                $("#" + info1).css({
+                    "-webkit-box-shadow": "0px 0px 105px 45px rgb(243, 6, 50)",
+                    "-moz-box-shadow": "0px 0px 105px 45px rgb(243, 6, 50)",
+                    "box-shadow": "0px 0px 10px 20px rgb(243, 6, 50)"
+                });
+            }else if(info3-result>2&&info3-result<5){
+                $("#" + info1).css({
+                    "-webkit-box-shadow": "0px 0px 105px 45px rgb(255, 144, 46)",
+                    "-moz-box-shadow": "0px 0px 105px 45px rgb(255, 144, 46)",
+                    "box-shadow": "0px 0px 10px 20px rgb(255, 144, 46)"
+                });
+            }else if(info3-result<=2){
+                $("#" + info1).css({
+                    "-webkit-box-shadow": "0px 0px 105px 45px rgb(255, 70, 46)",
+                    "-moz-box-shadow": "0px 0px 105px 45px rgb(255, 70, 46)",
+                    "box-shadow": "0px 0px 10px 20px rgb(255, 70, 46)"
+                });
+            }
+            else {
+                $("#" + info1).css({
+                    "-webkit-box-shadow": "0px 0px 105px 45px rgb(46, 255, 77)",
+                    "-moz-box-shadow": "0px 0px 105px 45px rgb(46, 255, 77)",
+                    "box-shadow": "0px 0px 10px 20px rgb(46, 255, 77)"
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+<header>
+    <a th:href="@{/keeper/store}">
+        <img src="../../static/img/logo.png" style="width: 18%" alt="找不到图片">
+    </a>
+</header>
+<div class="shortcut">
+    <div class="w">
+        <ul class="fr nav">
+            <li class="space"></li>
+            <li>
+                <a th:href="@{|/into/cash/${using}|}">收银</a>
+            </li>
+            <li class="space"></li>
+            <li>
+                <a th:href="@{|/into/stock/${using}|}">进货</a>
+            </li>
+            <li class="space"></li>
+            <li>
+                <a href="#">欢迎你</a>
+                <a href="#" id="ou" th:text="|${using}|"></a>
+            </li>
+            <li class="space"></li>
+            <li>
+                <a th:href="@{|/keeper/LookSub/${using}/1|}">线上用户订单</a>
+            </li>
+            <li class="space"></li>
+        </ul>
+    </div>
+</div>
+<div class="py-container">
+    <div class="w">
+        <div class="allgoods">
+            <h4>全部商品
+                <span>11</span>
+            </h4>
+            <div class="cart-main">
+                <div class="cart-th clearfix">
+                    <div style="margin-left: 5px">商品信息</div>
+                    <div class="" style="margin-left: 100px">商品等级</div>
+                    <div class="" style="margin-left: -185px">进价</div>
+                    <div class="" style="margin-left: -25px">售价</div>
+                    <div class="" style="margin-left: 40px">数量</div>
+                    <div class="" style="margin-left: 18px">操作</div>
+                    <div class="" style="margin-left: 130px">生产日期</div>
+                </div>
+                <div class="cart-item-list">
+                    <div class="cart-body">
+                        <div class="cart-list">
+                            <ul class="goods-list yui3-g" th:each="store:${stores}" th:object="${store}">
+                                <li class="yui3-u-3-8 pr">
+                                    <div class="good-item">
+                                        <div class="item-img">
+                                            <img th:src="@{|/static/foodImage/*{img}|}">
+                                        </div>
+                                        <div class="item-msg" th:text="|生鲜名:*{name}|">买了个der</div>
+                                    </div>
+                                </li>
+                                <li class="yui3-u-1-8" style="margin-left: 3.8%">
+                                    <span th:text="|*{quality}|">银色</span>
+                                    <br>
+                                </li>
+                                <li class="yui3-u-1-9" style="margin-left: 45px">
+                                    <span class="price" th:text="|*{inprice}|">66</span>
+                                </li>
+                                <li class="yui3-u-1-8" style="margin-left: 130px">
+                                    <span class="price" th:text="|*{outprice}|">66</span>
+                                </li>
+                                <li class="yui3-u-1-8" style="margin-left: 0px">
+                                    <div class="clearfix">
+                                        <a href="javascript:;" class="increment mins"
+                                           th:onclick="subtract([[*{name}]],[[*{quality}]])">-</a>
+                                        <input autocomplete="off" type="text" th:value="|*{number}|" minnum="0"
+                                               class="itxt" disabled="disabled">
+                                        <a href="javascript:;" class="increment plus"
+                                           th:onclick="add([[*{name}]],[[*{quality}]])">+</a>
+                                    </div>
+                                    <div class="youhuo">有货</div>
+                                </li>
+                                <li class="yui3-u-1-8">
+                                    <div class="del1">
+                                        <a href="javascript:;" th:onclick="del([[*{name}]],[[*{quality}]])">删除</a>
+                                        <a th:href="@{|/stock/change/${using}/*{name}/*{quality}|}">修改</a>
+                                    </div>
+                                </li>
+                                <li style="margin-left: 62px" th:id="|*{name}*{quality}|">
+                                    <span class="sum" th:text="|*{start}|"
+                                          th:onclick="alert11([[*{name}+*{quality}]],[[*{tool}]],[[*{day}]])"
+                                          style="font-size: 10px">Wed Oct 19 08:00:00 CST 2022</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+<!--i是给文字添加斜体样式-->
